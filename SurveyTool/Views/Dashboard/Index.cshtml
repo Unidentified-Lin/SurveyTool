@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "評分表單";
+    var surveys = (IEnumerable<SurveyTool.Models.Survey>)ViewBag.Surveys;
+}
+
+@section scripts
+{
+    @*@Scripts.Render("~/bundles/models")*@
+
+    <script type="text/javascript">
+        $(function () {
+            $('#tabs a:first').tab('show');
+
+            $('.label-success').tooltip({
+                title: '可以填寫此表單',
+                placement: 'top'
+            });
+
+            $('.label-important').tooltip({
+                title: '無法填寫此表單',
+                placement: 'top'
+            });
+        })
+    </script>
+}
+
+<div class="page-header">
+    <h2>@ViewBag.Title <small>填寫評分表單</small></h2>
+</div>
+
+<div id="take-survey">
+    @foreach (var survey in surveys)
+    {
+        <div class="row">
+            <div class="span9">
+                <h4>
+                    @if (survey.IsActive && (User.IsInRole("Teacher") || User.IsInRole("Admin")))
+                    {
+                        <span class="label label-success">A</span>
+                        <a href="@Url.Action("Create", "Responses", new { surveyId = survey.Id })">@survey.Name</a>
+                    }
+                    else
+                    {
+                        <span class="label label-important">X</span>
+                        <span class="muted">@survey.Name</span>
+                    }
+                </h4>
+            </div>
+            <div class="span3 text-right">
+                @if (survey.IsActive && (User.IsInRole("Teacher") || User.IsInRole("Admin")))
+                {
+                    <a class="btn" href="@Url.Action("Create", "Responses", new { surveyId = survey.Id })">
+                        填寫表單 <i class="icon-arrow-right"></i>
+                    </a>
+                }
+                else
+                {
+                    <a class="btn disabled" href="#">填寫表單 <i class="icon-arrow-right"></i></a>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="span4 text-left">
+                <span class="@(survey.IsActive ? "" : "muted")">
+                    @survey.Questions.Count() Questions
+                </span>
+            </div>
+            <div class="span4 text-center">
+                <span class="@(survey.IsActive ? "" : "muted")">
+                    Active: @survey.StartDate.ToString("d")
+                    to @survey.EndDate.ToString("d")
+                </span>
+            </div>
+            <div class="span4 text-right">
+                <span class="@(survey.IsActive ? "" : "muted")">
+                    最後回應:
+                    @(survey.Responses.Select(x => x.CreatedOn.ToString("d")).FirstOrDefault() ?? "無")
+                </span>
+            </div>
+        </div>
+
+            <hr />
+    }
+</div>

@@ -1,0 +1,103 @@
+﻿@model SurveyTool.Models.Response
+
+@{
+    ViewBag.Title = Model.Survey.Name;
+}
+
+<div class="page-header">
+    <h3>@ViewBag.Title</h3>
+</div>
+
+<div class="well well-small">
+    <h4>評分資訊</h4>
+</div>
+<ul class="unstyled bordered skip-first">
+    <li class="row">
+        <div class="span9">
+            <label><b>填表者</b></label>
+            <p class="help-block">
+                完成此評分回應的使用者.
+            </p>
+        </div>
+        <div class="span3">
+            <div class="well well-small">
+                @Model.CreatedBy
+            </div>
+        </div>
+    </li>
+    <li class="row">
+        <div class="span9">
+            <label><b>受評分者</b></label>
+            <p class="help-block">
+                此評分回應的被評分對象.
+            </p>
+        </div>
+        <div class="span3">
+            <div class="well well-small">
+                @Model.CreatedFor
+            </div>
+        </div>
+    </li>
+    <li class="row">
+        <div class="span9">
+            <label><b>表單日期</b></label>
+            <p class="help-block">
+                完成此評分回應的日期.
+            </p>
+        </div>
+        <div class="span3">
+            <div class="well well-small">
+                @Model.CreatedOn.ToString("d")
+            </div>
+        </div>
+    </li>
+</ul>
+
+<div class="well well-small">
+    <h4>學員回饋</h4>
+</div>
+<ul class="unstyled bordered skip-first">
+    <li class="row">
+        <div class="span9">
+            <label><b>學員滿意度</b></label>
+            <p class="help-block">
+                學員對本次評量滿意程度.
+            </p>
+        </div>
+        <div class="span3">
+            <div class="well well-small">
+                @(Model.Feedback == null ? "" : Model.Feedback.Value)
+            </div>
+        </div>
+    </li>
+    <li class="row">
+        <div class="span9">
+            <label><b>學員回饋</b></label>
+            <p class="help-block">
+                學員對此次技術操作過程的心得與感想.
+            </p>
+        </div>
+        <div class="span3">
+            <textarea readonly>@(Model.Feedback == null ? "" : Model.Feedback.Comment)</textarea>
+        </div>
+    </li>
+</ul>
+
+<div class="well well-small">
+    <h4>問題</h4>
+</div>
+<ul class="unstyled bordered skip-first">
+    @foreach (var item in Model.Answers)
+    {
+        <li class="row">
+            <div class="span9">
+                @Html.Raw(item.Question.Title) <br />
+                @Html.Raw(item.Question.Body)
+            </div>
+            <div class="span3">
+                <div class="well well-small">@item.Value</div>
+                <textarea readonly>@item.Comment</textarea>
+            </div>
+        </li>
+    }
+</ul>

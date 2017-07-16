@@ -1,0 +1,35 @@
+﻿@using SurveyTool.Models
+@model UserListViewModel
+
+@{
+    ViewBag.Title = "使用者清單";
+}
+
+<h2>@ViewBag.Title</h2>
+@Html.ActionLink("角色清單", "Index")
+<hr />
+<table id="user-list" class="table table-striped">
+    <thead>
+        <tr>
+            <th class="span3">使用者名稱</th>
+            <th class="span4">使用者帳號</th>
+            <th class="span3">角色/權限</th>
+            <th class="span2">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Username</td>
+                <td>@user.Account</td>
+                <td>@user.Role</td>
+                <td>
+                    <a href="@Url.Action("EditUserRole", new {UserName = user.Account, RoleName = user.Role})">
+                        <i class="icon-pencil"></i> 編輯
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

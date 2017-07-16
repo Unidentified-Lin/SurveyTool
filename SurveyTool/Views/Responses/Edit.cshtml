@@ -1,0 +1,152 @@
+﻿@model SurveyTool.Models.Response
+
+@{
+    ViewBag.Title = Model.Survey.Name;
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('.datepicker').datepicker({ format: 'mm/dd/yyyy' });
+
+            $(document).on('click', 'a[data-toggle=comment]', function () {
+                var id = $(this).attr('href');
+                $(id).toggle();
+                return false;
+            });
+        });
+    </script>
+}
+
+<form action="@Url.Action("Edit", "Responses")" method="post">
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.CreatedBy)
+    @Html.HiddenFor(model => model.CreatedFor)
+    @Html.HiddenFor(model => model.CreatedOn)
+    <div class="page-header">
+        <h3>@ViewBag.Title</h3>
+    </div>
+
+    <div class="well well-small">
+        <h4>回應資訊</h4>
+    </div>
+    <ul class="unstyled bordered skip-first">
+        <li class="row">
+            <div class="span9">
+                <label><b>填表者</b></label>
+                <p class="help-block">
+                    完成此評分回應的使用者.
+                </p>
+            </div>
+            <div class="span3">
+                <div class="well well-small">
+                    @Html.DisplayTextFor(m => m.CreatedBy)
+                </div>
+            </div>
+        </li>
+        <li class="row">
+            <div class="span9">
+                <label><b>受評分者</b></label>
+                <p class="help-block">
+                    此評分回應的被評分對象.
+                </p>
+            </div>
+            <div class="span3">
+                <div class="well well-small">
+                    @Html.DisplayTextFor(m => m.CreatedFor)
+                </div>
+            </div>
+        </li>
+        <li class="row">
+            <div class="span9">
+                <label><b>表單日期</b></label>
+                <p class="help-block">
+                    完成此評分回應的日期.
+                </p>
+            </div>
+            <div class="span3">
+                <div class="well well-small">
+                    @{   var date = String.Format("{0:yyyy-MM-dd}", Model.CreatedOn); }
+                    @Html.DisplayTextFor(m => date)
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <div class="well well-small">
+        <h4>問題</h4>
+    </div>
+
+    <ul class="unstyled bordered skip-first">
+        @foreach (var item in Model.Answers)
+        {
+            <li class="row">
+                <input type="hidden" name="Answers.Index" value="@item.Id" />
+                <input type="hidden" name="Answers[@item.Id].Id" value="@item.Id" />
+                <input type="hidden" name="Answers[@item.Id].QuestionId" value="@item.QuestionId" />
+                <input type="hidden" name="Answers[@item.Id].ResponseId" value="@item.ResponseId" />
+                <div class="span9">
+                    <div class="text-info"><h5>@Html.Raw(item.Question.Title)</h5></div> <br />
+                    @Html.Raw(item.Question.Body)
+                </div>
+                <div class="span3">
+                    @if (item.Question.Type.Substring(0, 2) == "選擇")
+                    {
+                        int n = Int32.Parse(item.Question.Type.Substring(3, 1));
+                        <select class="span3" name="Answers[@item.Id].Value">
+                            @if (String.IsNullOrEmpty(item.Value))
+                            {
+                                <option disabled selected>選擇...</option>
+                                for (int i = 1; i <= n; i++)
+                                {
+                                    <option>@i</option>
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 1; i <= n; i++)
+                                {
+                                    if (i == Int32.Parse(item.Value))
+                                    {
+                                        <option selected>@i</option>
+                                    }
+                                    else
+                                    {
+                                        <option>@i</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    }
+                    @if (item.Question.Type == "填答")
+                    {
+                        if (String.IsNullOrEmpty(item.Value))
+                        {
+                            <input class="span3" type="text" name="Answers[@item.Id].Value" placeholder="輸入..." />
+                        }
+                        else
+                        {
+                            <input class="span3" type="text" name="Answers[@item.Id].Value" value="@item.Value" />
+                        }
+                    }
+                    @if (String.IsNullOrEmpty(item.Comment))
+                    {
+                        <textarea id = "@("comment" + item.Id)" class="span3 hide" name="Answers[@item.Id].Comment" placeholder="Comments..."></textarea>
+                    }
+                    else
+                    {
+                        <textarea id="@("comment" + item.Id)" class="span3 hide" name="Answers[@item.Id].Comment">@item.Comment</textarea>
+                    }
+
+                    <a href="@("#comment" + @item.Id)" data-toggle="comment"><small>顯示/隱藏 Comment</small></a>
+                </div>
+            </li>
+        }
+    </ul>
+
+    <div class="form-actions">
+        <input class="btn btn-primary" type="submit" name="action" value="儲存" />
+        <a class="btn" href="@Url.Action("Index", "Home")">取消</a>
+    </div>
+</form>

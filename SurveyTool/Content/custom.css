@@ -1,0 +1,41 @@
+﻿body {
+  /* 一般都會選擇 small 或 medium為主大小；
+     small約 12px; medium 約 14px;
+  */
+  font-size: large;
+}
+
+h1 {
+  /* 12px * 200% 約 24px */
+  font-size: 200%;
+}
+
+h2 {
+  /* 12px * 160% 約 19px */
+  font-size: 160%;
+}
+
+h3 {
+  /* 12px * 120% 約 14px  */
+  font-size: 140%;
+}
+
+h4 {
+  /* 12px * 120% 約 14px  */
+  font-size: 120%;
+}
+
+h5 {
+  /* 12px * 110% 約 13px  */
+  font-size: 110%;
+}
+
+label {
+  /* 12px * 120% 約 14px  */
+  font-size: 100%;
+}
+
+p {
+  /* 12 * 1.5 = 18px  */
+  font-size: 1.0em;
+}

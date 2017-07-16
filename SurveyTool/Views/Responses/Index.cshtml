@@ -1,0 +1,66 @@
+﻿@model IEnumerable<SurveyTool.Models.Response>
+
+@{
+    ViewBag.Title = "評分紀錄";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/models")
+    <script type="text/javascript">
+        $(function () {
+            ko.applyBindings(new ResponseListModel(), $('#response-list')[0]);
+        })
+    </script>
+}
+
+<div class="page-header">
+    <h2>@ViewBag.Title <small>評分歷史紀錄</small></h2>
+</div>
+
+
+<div>
+    <table id="response-list" class="table table-striped">
+        <thead>
+            <tr>
+                <th class="span1">日期</th>
+                <th class="span7">表單</th>
+                <th class="span3">受評人</th>
+                <th class="span1">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var response in Model)
+            {
+                <tr>
+                    <td><span class="muted">@response.CreatedOn.ToString("d")</span></td>
+                    <td>
+                        @Html.ActionLink(response.Survey.Name, "Details", "Responses",
+                                  new { surveyId = response.SurveyId, responseId = response.Id },
+                                  null)
+                    </td>
+                    <td>
+                        @response.CreatedFor
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                                <i class="icon-wrench"></i><span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="@Url.Action("Edit", "Responses",  new { surveyId = response.SurveyId, responseId = response.Id})">
+                                        <i class="icon-pencil"></i> 編輯
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("Delete", "Responses", new { surveyId = response.SurveyId, responseId = response.Id })" data-bind="click: destroy"><i class="icon-trash"></i> 刪除</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

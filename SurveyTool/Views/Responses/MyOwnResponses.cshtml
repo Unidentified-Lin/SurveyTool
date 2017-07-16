@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SurveyTool.Models.Response>
+
+@{
+    ViewBag.Title = "回饋";
+}
+
+@section scripts
+{
+    @*@Scripts.Render("~/bundles/models")*@
+}
+
+<div class="page-header">
+    <h2>@ViewBag.Title</h2>
+</div>
+
+
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="span1">日期</th>
+                <th class="span7">表單</th>
+                <th class="span3">評分者</th>
+                <th class="span1">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var response in Model)
+            {
+                <tr>
+                    <td><span class="muted">@response.CreatedOn.ToString("d")</span></td>
+                    <td>
+                        @Html.ActionLink(response.Survey.Name, "Details", "Responses",
+                                             new { surveyId = response.SurveyId, responseId = response.Id },
+                                             null)
+                    </td>
+                    <td>@response.CreatedBy.ToString()</td>
+                    <td>
+                        @Html.ActionLink("回饋", "Feedback", "Responses",
+                                             new { surveyId = response.SurveyId, responseId = response.Id },
+                                             null)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

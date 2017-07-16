@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SurveyTool.Models.Response>
+
+@{
+    ViewBag.Title = "評分紀錄";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/models")
+
+    <script type="text/javascript">
+        $(function () {
+            ko.applyBindings(new ResponseListModel(), $('#response-list')[0]);
+        })
+    </script>
+}
+
+<div class="page-header">
+    <h2>@ViewBag.Title <small>管理評分紀錄</small></h2>
+</div>
+
+<table id="response-list" class="table table-striped">
+    <thead>
+        <tr>
+            <th class="span1">日期</th>
+            <th class="span6">表單</th>
+            <th class="span3">評分者</th>
+            <th class="span2">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><span class="muted">@item.CreatedOn.ToString("d")</span></td>
+                <td>
+                    <a href="@Url.Action("Details", "Responses", new {surveyId = item.SurveyId, responseId = item.Id})">
+                        @item.Survey.Name
+                    </a>
+                </td>
+                <td>
+                    @item.CreatedBy
+                </td>
+                <td>
+                    @Html.ActionLink("刪除", "Delete",
+                                     new { Controller = "Responses", surveyId = item.SurveyId, responseId = item.Id },
+                                     new { @class = "text-error", data_bind = "click: destroy" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

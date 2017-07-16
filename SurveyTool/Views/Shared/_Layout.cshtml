@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - NTSS</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    @Styles.Render("~/Content/bootstrap")
+    @Styles.Render("~/Content/cleditor")
+    @Styles.Render("~/Content/toastr")
+    @Styles.Render("~/Content/site")
+    @Styles.Render("~/Content/custom")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">NTS System</a>
+
+                <div class="nav-collapse collapse">
+                    @Html.Partial("_MenuPartial")
+                    @Html.Partial("_LoginPartial")
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="content" class="container">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/toastr")
+    @RenderSection("scripts", required: false)
+    @Html.Partial("_FlashPartial")
+</body>
+</html>

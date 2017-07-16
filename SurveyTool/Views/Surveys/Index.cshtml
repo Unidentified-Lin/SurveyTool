@@ -1,0 +1,73 @@
+﻿@model IEnumerable<SurveyTool.Models.Survey>
+
+@{
+    ViewBag.Title = "管理表單";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/models")
+
+    <script type="text/javascript">
+        $(function () {
+            ko.applyBindings(new SurveyListModel(), $('#survey-list')[0]);
+        })
+    </script>
+}
+
+<div class="page-header">
+    <a class="btn btn-success pull-right" href="@Url.Action("Create")">
+        <i class="icon-plus"></i> 新增表單
+    </a>
+    <h2>@ViewBag.Title  <small>新增或管理表單</small></h2>
+</div>
+
+<table id="survey-list" class="table table-striped">
+    <thead>
+        <tr>
+            <th class="span1">ID</th>
+            <th class="span8">表單名稱</th>
+            <th class="span2">狀態</th>
+            <th class="span1">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>@Html.DisplayFor(x => item.IsActive, "IsActive")</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-wrench"></i><span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <a href="@Url.Action("Edit", new {id = item.Id})">
+                                    <i class="icon-pencil"></i> 編輯
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Copy", new { id = item.Id })">
+                                    <i class="icon-file"></i> 複製
+                                </a>
+                            </li>
+                            @*<li>
+                                <a href="@Url.Action("Index", "Responses", new { surveyId = item.Id })">
+                                    <i class="icon-list"></i> 回應
+                                </a>
+                            </li>*@
+                            <li>
+                                <a href="@Url.Action("Delete", new {id = item.Id})" data-bind="click: destroy">
+                                    <i class="icon-trash"></i> 刪除
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

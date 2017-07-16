@@ -1,0 +1,25 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+@{
+    ViewBag.Title = "編輯角色";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.ActionLink("角色清單", "Index") | @Html.ActionLink("使用者清單", "UserList")
+<hr />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    <div>
+        角色名稱
+    </div>
+    <p>
+        @Html.TextBoxFor(model => model.Name)
+    </p>
+    <div>
+        <input class="btn btn-primary" type="submit" value="儲存" />
+        <a class="btn" href="@Url.Action("Index")">取消</a>
+    </div>
+}

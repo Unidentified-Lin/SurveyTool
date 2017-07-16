@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SurveyTool.Models.Response>
+
+@{
+    ViewBag.Title = "匯出資料表";
+    var questions = (IEnumerable<SurveyTool.Models.Question>)ViewBag.Questions;
+}
+
+<div class="page-header">
+    @*<a class="btn btn-success pull-right" href="@Url.Action("ExportToExcel", new { surveyId = ViewBag.SurveyId })">
+            <i class="icon-file"></i> 匯出Excel
+        </a>*@
+    <a class="btn btn-success pull-right" href="@Url.Action("ExportToCSV", new { surveyId = ViewBag.SurveyId })">
+        <i class="icon-file"></i> 匯出CSV
+    </a>
+    <h2>@ViewBag.Title <small>@ViewBag.SurveyName</small></h2>
+</div>
+
+<div style="overflow-x:auto">
+    <table class="table table-striped table-hover table-condensed">
+        <thead>
+            <tr>
+                <th style="white-space: nowrap">日期</th>
+                <th style="white-space: nowrap">評分者</th>
+                <th style="white-space: nowrap">被評者</th>
+                @foreach (var question in questions)
+                {
+                    <th style="white-space: nowrap">@question.Title</th>
+                }
+                <th style="white-space: nowrap">學員滿意度</th>
+                <th style="white-space: nowrap">學員回饋</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var response in Model)
+            {
+                <tr>
+                    <td>@response.CreatedOn</td>
+                    <td>@response.CreatedBy</td>
+                    <td>@response.CreatedFor</td>
+                    @foreach (var ans in response.Answers)
+                    {
+                        <td>@Html.DisplayFor(x => ans.Value)</td>
+                    }
+                    <td>@(response.Feedback == null ? "" : response.Feedback.Value)</td>
+                    <td>@(response.Feedback == null ? "" : response.Feedback.Comment)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

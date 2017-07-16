@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@{
+    ViewBag.Title = "角色/權限清單";
+}
+<h2>@ViewBag.Title</h2>
+@Html.ActionLink("新增角色", "Create") | @Html.ActionLink("使用者清單", "UserList")
+<hr />
+<table id="user-list" class="table table-striped">
+    <thead>
+        <tr>
+            <th class="span9">角色名稱</th>
+            <th class="span2">操作</th>
+            <th class="span1">刪除</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Name</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { roleName = @role.Name })">
+                        <i class="icon-pencil"></i> 編輯
+                    </a>
+                </td>
+                <td><span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*<div>
+    @foreach (var role in Model)
+    {
+        <p>
+            <strong>@role.Name | </strong>
+            @Html.ActionLink("Edit", "Edit", new { roleName = @role.Name }) |
+            <span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span> |
+
+        </p>
+    }
+</div>*@

@@ -1,0 +1,17 @@
+﻿@if (Request.IsAuthenticated)
+{
+    <ul class="nav">
+        <li><a href="@Url.Action("Index", "Dashboard")">評分表單</a></li>
+        @if (User.IsInRole("Teacher") || User.IsInRole("Admin"))
+        {
+            <li><a href="@Url.Action("Index", "Responses")">評分紀錄</a></li>
+        }
+        <li><a href="@Url.Action("MyOwnResponses", "Responses")">回饋</a></li>
+        @if (User.IsInRole("Admin"))
+        {
+            <li><a href="@Url.Action("Index", "Reports")">表單紀錄</a></li>
+            <li><a href="@Url.Action("Index", "Surveys")">管理表單</a></li>
+            <li><a href="@Url.Action("Index", "Roles")">角色與權限</a></li>
+        }
+    </ul>
+}

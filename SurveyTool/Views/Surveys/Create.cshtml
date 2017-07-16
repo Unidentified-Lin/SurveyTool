@@ -1,0 +1,27 @@
+﻿@model SurveyTool.Models.Survey
+
+@{
+    ViewBag.Title = "新增表單";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/cleditor")
+    @Scripts.Render("~/bundles/models")
+
+    <script type="text/javascript">
+        $(function() {
+            ko.validation.init({ insertMessages: false });
+            ko.applyBindings(new SurveyModel());
+
+            $('.datepicker').datepicker({
+                language: 'zh-TW',
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
+}
+
+@*導向Survey.cshtml*@
+@Html.EditorForModel(new {title = "新增表單", url = Url.Action("Create")})

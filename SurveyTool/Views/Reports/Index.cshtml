@@ -1,0 +1,85 @@
+﻿@model IEnumerable<SurveyTool.Models.Survey>
+
+@{
+    ViewBag.Title = "統計結果";
+    var responses = (IEnumerable<SurveyTool.Models.Response>)ViewBag.Responses;
+}
+
+@section scripts
+{
+    @*@Scripts.Render("~/bundles/models")*@
+
+    <script type="text/javascript">
+        $(function () {
+            $('#tabs a:first').tab('show');
+        })
+    </script>
+    @*<style>
+            /*讓最後一筆紀錄因"操作"的下拉選單而造成的卷軸消失*/
+            .tab-content {
+                overflow: visible;
+            }
+        </style>*@
+}
+
+<div class="page-header">
+    <h2>@ViewBag.Title</h2>
+</div>
+
+<ul id="tabs" class="nav nav-tabs">
+    <li><a class="active" href="#overall" data-toggle="tab"><i class="icon-time"></i> 所有評分紀錄</a></li>
+    <li><a href="#surveyList" data-toggle="tab"><i class="icon-list-alt"></i> 表單分類紀錄</a></li>
+    <li><a href="#exportSurveyList" data-toggle="tab"><i class="icon-list-alt"></i> 匯出表單資料</a></li>
+</ul>
+
+<div class="tab-content">
+    <div id="overall" class="tab-pane active">
+        <table id="response-list" class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="span1">日期</th>
+                    @*<th class="span1">Id</th>*@
+                    <th class="span6">表單</th>
+                    <th class="span2">被評者</th>
+                    <th class="span2">評分者</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var response in responses)
+                {
+                    <tr>
+                        <td><span class="muted">@response.CreatedOn.ToString("d")</span></td>
+                        @*<td>@response.Id.ToString()</td>*@
+                        <td>
+                            @Html.ActionLink(response.Survey.Name, "Details", "Responses",
+                                             new { surveyId = response.SurveyId, responseId = response.Id },
+                                             null)
+                        </td>
+                        <td>@response.CreatedFor</td>
+                        <td>@response.CreatedBy.ToString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div id="surveyList" class="tab-pane">
+        <ul>
+            @foreach (var survey in Model)
+            {
+                <li>
+                    <a href="@Url.Action("SurveyResponses", new { surveyId = survey.Id })">@survey.Name</a>
+                </li>
+            }
+        </ul>
+    </div>
+    <div id="exportSurveyList" class="tab-pane">
+        <ul>
+            @foreach (var survey in Model)
+            {
+                <li>
+                    <a href="@Url.Action("Report", new { surveyId = survey.Id, surveyName = survey.Name})">@survey.Name</a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

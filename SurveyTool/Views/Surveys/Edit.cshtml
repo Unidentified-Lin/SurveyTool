@@ -1,0 +1,41 @@
+﻿@model SurveyTool.Models.Survey
+
+@{
+    ViewBag.Title = "修改表單";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/cleditor")
+    @Scripts.Render("~/bundles/models")
+
+    <script type="text/javascript">
+        $(function() {
+            ko.validation.init({ insertMessages: false });
+            ko.applyBindings(new SurveyModel(@Html.Raw(Model.ToJson()))); //some how...Question的資料從這邊傳進去
+
+            //$('#survey-form').submit(function() {
+            //    var $form = $(this),
+            //        url = $form.attr('action'),
+            //        params = $form.serialize();
+
+            //    var result = $.post(url, params);
+
+            //    result.error(function() {
+            //        toastr.error('在嘗試儲存此表單時發生錯誤.');
+            //    });
+
+            //    return false;
+            //});
+
+            $('.datepicker').datepicker({
+                language: 'zh-TW',
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
+}
+
+@*導向Survey.cshtml*@
+@Html.EditorForModel(new {title = "修改表單", url = Url.Action("Edit", new {id = Model.Id})}) 
